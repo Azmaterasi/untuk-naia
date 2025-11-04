@@ -59,36 +59,29 @@
             margin-top: 10px;
             display: none;
         }
-        #image {
-            display: none; /* Sembunyikan gambar awalnya */
+        .content {
+            display: none; /* Sembunyikan semua konten awalnya */
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
             margin-top: 20px;
             position: relative;
             z-index: 10;
         }
-        #image img {
-            max-width: 200px;
+        #image1, #image2 {
+            max-width: 300px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         #music {
-            display: none; /* Musik juga sembunyi awalnya */
-            margin-top: 20px;
-            position: relative;
-            z-index: 10;
-        }
-        #music iframe {
-            border: none;
             width: 300px;
             height: 200px;
+            border: none;
         }
         #love-message {
-            display: none; /* Sembunyikan pesan awalnya */
             font-size: 1.5em;
             color: #d63384;
-            margin-top: 20px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 10;
         }
         .heart {
             position: absolute;
@@ -117,23 +110,20 @@
         <button id="no">No</button>
         <div id="no-message"></div>
     </div>
-    <div id="image">
-        <img src="naiju.jpg" alt="Gambar Surprise"> <!-- Ganti dengan URL gambar publik -->
-    </div>
-    <div id="music">
-        <iframe id="youtube-player" src="https://www.youtube.com/embed/jia3fhBQ8qI?autoplay=1&mute=1&enablejsapi=1&loop=1&playlist=jia3fhBQ8qI" allowfullscreen></iframe> <!-- Ganti VIDEO_ID dengan ID nyata; tambah loop untuk putar ulang -->
-    </div>
-    <div id="love-message">
-        SEMANGAT SAYANGKU. SETELAH SELESAI SEMUANYA KITA LEPASKAN KERINDUANNYA YAAAA!! LOV UUU
+    <div class="content">
+        <img id="image1" src="junai.jpg" alt="Gambar Surprise 1"> <!-- Ganti dengan URL gambar pertama -->
+        <iframe id="youtube-player" src="https://www.youtube.com/embed/jia3fhBQ8qI?autoplay=1&mute=1&enablejsapi=1&loop=1&playlist=jia3fhBQ8qIQ&start=78" allowfullscreen></iframe> <!-- Musik di tengah -->
+        <img id="image2" src="naiju.jpg" alt="Gambar Surprise 2"> <!-- Ganti dengan URL gambar kedua -->
+        <div id="love-message">
+            SEMANGAT SAYANGKU. SETELAH SELESAI SEMUANYA KITA LEPASKAN KERINDUANNYA YAAAA!! LOV UUU
+        </div>
     </div>
 
     <script>
         const noButton = document.getElementById('no');
         const yesButton = document.getElementById('yes');
-        const imageDiv = document.getElementById('image');
-        const musicDiv = document.getElementById('music');
+        const contentDiv = document.querySelector('.content');
         const noMessage = document.getElementById('no-message');
-        const loveMessage = document.getElementById('love-message');
         const heartsContainer = document.getElementById('hearts-container');
         const youtubePlayer = document.getElementById('youtube-player');
 
@@ -162,11 +152,9 @@
             }
         });
 
-        // Fungsi untuk tampilkan gambar, musik, dan pesan saat Yes diklik, lalu unmute
+        // Fungsi untuk tampilkan semua konten saat Yes diklik, lalu unmute musik
         yesButton.addEventListener('click', function() {
-            imageDiv.style.display = 'block'; // Tampilkan gambar
-            musicDiv.style.display = 'block'; // Tampilkan musik
-            loveMessage.style.display = 'block'; // Tampilkan pesan cinta
+            contentDiv.style.display = 'flex'; // Tampilkan konten (gambar1, musik, gambar2, pesan)
             noButton.style.display = 'none';
             noMessage.style.display = 'none';
             // Unmute lagu (autoplay sudah dimulai muted)
@@ -179,7 +167,7 @@
                 youtubePlayer.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
             } else {
                 // Jika musik sudah ditampilkan (setelah Yes diklik), lanjutkan play
-                if (musicDiv.style.display === 'block') {
+                if (contentDiv.style.display === 'flex') {
                     youtubePlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
                 }
             }
