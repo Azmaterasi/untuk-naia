@@ -66,7 +66,7 @@
             z-index: 10;
         }
         #image img {
-            max-width: 300px;
+            max-width: 200px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
@@ -80,6 +80,15 @@
             border: none;
             width: 300px;
             height: 200px;
+        }
+        #love-message {
+            display: none; /* Sembunyikan pesan awalnya */
+            font-size: 1.5em;
+            color: #d63384;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 10;
         }
         .heart {
             position: absolute;
@@ -112,7 +121,10 @@
         <img src="naiju.jpg" alt="Gambar Surprise"> <!-- Ganti dengan URL gambar publik -->
     </div>
     <div id="music">
-        <iframe id="youtube-player" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&enablejsapi=1&loop=1&playlist=dQw4w9WgXcQ" allowfullscreen></iframe> <!-- Ganti VIDEO_ID dengan ID nyata; tambah loop untuk putar ulang -->
+        <iframe id="youtube-player" src="https://www.youtube.com/embed/jia3fhBQ8qI?autoplay=1&mute=1&enablejsapi=1&loop=1&playlist=jia3fhBQ8qI" allowfullscreen></iframe> <!-- Ganti VIDEO_ID dengan ID nyata; tambah loop untuk putar ulang -->
+    </div>
+    <div id="love-message">
+        SEMANGAT SAYANGKU. SETELAH SELESAI SEMUANYA KITA LEPASKAN KERINDUANNYA YAAAA!! LOV UUU
     </div>
 
     <script>
@@ -121,6 +133,7 @@
         const imageDiv = document.getElementById('image');
         const musicDiv = document.getElementById('music');
         const noMessage = document.getElementById('no-message');
+        const loveMessage = document.getElementById('love-message');
         const heartsContainer = document.getElementById('hearts-container');
         const youtubePlayer = document.getElementById('youtube-player');
 
@@ -149,10 +162,11 @@
             }
         });
 
-        // Fungsi untuk tampilkan gambar dan musik saat Yes diklik, lalu unmute
+        // Fungsi untuk tampilkan gambar, musik, dan pesan saat Yes diklik, lalu unmute
         yesButton.addEventListener('click', function() {
             imageDiv.style.display = 'block'; // Tampilkan gambar
             musicDiv.style.display = 'block'; // Tampilkan musik
+            loveMessage.style.display = 'block'; // Tampilkan pesan cinta
             noButton.style.display = 'none';
             noMessage.style.display = 'none';
             // Unmute lagu (autoplay sudah dimulai muted)
