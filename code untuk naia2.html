@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise untuk Pacar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #ffcccc, #ffe6e6);
+            padding: 50px;
+            overflow: hidden;
+            position: relative;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #d63384;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+        .buttons {
+            margin-top: 30px;
+            position: relative;
+            z-index: 10;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.5em;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.1);
+        }
+        #yes {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #no {
+            background-color: #f44336;
+            color: white;
+            position: relative;
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        #no-message {
+            font-size: 1em;
+            color: #d63384;
+            margin-top: 10px;
+            display: none;
+        }
+        #image {
+            display: none; /* Sembunyikan gambar awalnya */
+            margin-top: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        #image img {
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        #music {
+            display: none; /* Musik juga sembunyi awalnya */
+            margin-top: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        #music iframe {
+            border: none;
+            width: 300px;
+            height: 200px;
+        }
+        .heart {
+            position: absolute;
+            font-size: 2em;
+            color: #ff69b4;
+            animation: fall linear infinite;
+            pointer-events: none;
+        }
+        @keyframes fall {
+            0% {
+                top: -50px;
+                opacity: 1;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="hearts-container"></div>
+    <h1>kamu sayang aku atau engga??</h1>
+    <div class="buttons">
+        <button id="yes">Yes</button>
+        <button id="no">No</button>
+        <div id="no-message"></div>
+    </div>
+    <div id="image">
+        <img src="naiju.jpg" alt="Gambar Surprise"> <!-- Ganti dengan URL gambar publik -->
+    </div>
+    <div id="music">
+        <iframe id="youtube-player" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&enablejsapi=1&loop=1&playlist=dQw4w9WgXcQ" allowfullscreen></iframe> <!-- Ganti VIDEO_ID dengan ID nyata; tambah loop untuk putar ulang -->
+    </div>
+
+    <script>
+        const noButton = document.getElementById('no');
+        const yesButton = document.getElementById('yes');
+        const imageDiv = document.getElementById('image');
+        const musicDiv = document.getElementById('music');
+        const noMessage = document.getElementById('no-message');
+        const heartsContainer = document.getElementById('hearts-container');
+        const youtubePlayer = document.getElementById('youtube-player');
+
+        let noClickCount = 0;
+
+        // Fungsi untuk bergetar saat hover
+        noButton.addEventListener('mouseenter', function() {
+            noButton.classList.add('shake');
+            setTimeout(() => {
+                noButton.classList.remove('shake');
+            }, 500);
+        });
+
+        // Fungsi untuk klik No dengan pesan bertahap
+        noButton.addEventListener('click', function() {
+            noClickCount++;
+            noMessage.style.display = 'block';
+
+            if (noClickCount === 1) {
+                noMessage.textContent = 'yakin engga?';
+            } else if (noClickCount === 2) {
+                noMessage.textContent = 'sumpah gasih ga sayang?';
+            } else if (noClickCount === 3) {
+                noButton.style.display = 'none';
+                noMessage.textContent = 'harus klik yes lah anjir gaboleh no';
+            }
+        });
+
+        // Fungsi untuk tampilkan gambar dan musik saat Yes diklik, lalu unmute
+        yesButton.addEventListener('click', function() {
+            imageDiv.style.display = 'block'; // Tampilkan gambar
+            musicDiv.style.display = 'block'; // Tampilkan musik
+            noButton.style.display = 'none';
+            noMessage.style.display = 'none';
+            // Unmute lagu (autoplay sudah dimulai muted)
+            youtubePlayer.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+        });
+
+        // Fungsi untuk autopause saat tab tidak aktif, dan autoplay saat aktif kembali
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                youtubePlayer.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            } else {
+                // Jika musik sudah ditampilkan (setelah Yes diklik), lanjutkan play
+                if (musicDiv.style.display === 'block') {
+                    youtubePlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                }
+            }
+        });
+
+        // Fungsi untuk membuat hati jatuh seperti hujan
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+    </script>
+</body>
+</html>
